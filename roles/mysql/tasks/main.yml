@@ -10,7 +10,7 @@
     image: "{{ default_container_image }}"
 #   command: "{{ default_container_command }}"
     ports:
-      - "{{ default_container_image }}:3306"
+      - "{{ mysql_port }}:3306"
     volumes:
       - /data:/var/lib/mysql
     restart: true
