@@ -20,6 +20,9 @@
     memory_swap: "{{ mysql_memory_limit }}"
     env:
       MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
+      MYSQL_ALLOW_EMPTY_PASSWORD: "{{ mysql_allow_empty_password }}"
+      MYSQL_USER: "{{ mysql_user }}"
+      MYSQL_PASSWORD: "{{ mysql_password }}"
     restart: true
     restart_policy: unless-stopped
     state: started
