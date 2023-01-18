@@ -3,7 +3,7 @@
   connection: local
   become: true
   vars:
-    mysql_port: 3306
+#    mysql_port: 3306
     mysql_root_password: change-me
     mysql_data_directory: /data
     default_container_image: mysql:8
