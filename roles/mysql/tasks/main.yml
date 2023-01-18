@@ -1,28 +1,43 @@
 ---
-- name: Pull default Docker image
-  community.docker.docker_image:
-    name: "{{ default_container_image }}"
-    source: pull
+- name: Ensure mysql dirs exist
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "{{ mysql_backups_dir }}"
+    - "{{ mysql_conf_dir }}"
+    - "{{ mysql_lib_dir }}"
 
-- name: Create default containers
-  community.docker.docker_container:
-    name: "{{ default_container_name }}"
-    image: "{{ default_container_image }}"
-    command: "{{ default_container_command }}"
-    network_mode: host
-    volumes:
-      - "{{ mysql_data_directory }}"
+- name: Copy mysql config files
+  template:
+    src: "templates/{{ item }}.j2"
+    dest: "{{ mysql_conf_dir }}/{{ item }}"
+    force: yes
+  with_items:
+    - "character-set.cnf"
+    - "my.cnf"
+    - "sql-mode.cnf"
+
+- name: Run mysql 5.7 server
+  docker_container:
+    env:
+      TZ: Asia/Seoul      
+    image: mysql:5.7
+    name: "{{ mysql_container_name }}"
+    ports:
+      - "{{ mysql_port }}:3306"
+    pull: true
+    recreate: true
+    restart_policy: unless-stopped
+    state: started
     tmpfs:
       - /tmp:rw,size=1g,mode=177
     memory: "{{ mysql_memory_limit }}"
-    memory_swap: "{{ mysql_memory_limit }}"
-    env:
-      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
-      MYSQL_ALLOW_EMPTY_PASSWORD: "{{ mysql_allow_empty_password }}"
-      MYSQL_USER: "{{ mysql_user }}"
-      MYSQL_PASSWORD: "{{ mysql_password }}"
-      MYSQL_INITDB_SKIP_TZINFO: "true"
-      TZ: Asia/Seoul
-    restart: true
-    restart_policy: unless-stopped
-    state: started
+    memory_swap: "{{ mysql_memory_limit }}"    
+    network_mode: host
+    volumes:
+      - "{{ mysql_backups_dir }}:/var/backups/mysql"
+      - "{{ mysql_conf_dir }}:/etc/mysql/conf.d"
+      - "{{ mysql_lib_dir }}:/var/lib/mysql"
