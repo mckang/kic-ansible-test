@@ -12,6 +12,8 @@
     ports:
       - "{{ mysql_port }}:3306"
     volumes:
-      - /data:/var/lib/mysql
+      - {{ mysql_data_directory }}:/var/lib/mysql
+    env:
+      MYSQL_ROOT_PASSWORD: "{{ mysql_root_password }}"
     restart: true
     state: started
