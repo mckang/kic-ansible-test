@@ -1,0 +1,24 @@
+---
+- name: Creates Nginx Proxy Manager Directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0777
+    recurse: yes
+  with_items:
+    - /data/nginx_manager/data
+    - /data/nginx_manager/letsencrypt 
+- name: Run Nginx Proxy Manager
+  docker_container:
+    image: jc21/nginx-proxy-manager:latest
+    name: nginx_manager
+    pull: true
+    recreate: true
+    restart_policy: unless-stopped
+    state: started  
+    network_mode: host
+    volumes:
+      - /data/nginx_manager/data:/data
+      - /data/nginx_manager/letsencrypt:/etc/letsencrypt
