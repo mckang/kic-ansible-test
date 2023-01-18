@@ -8,7 +8,7 @@
   community.docker.docker_container:
     name: "{{ default_container_name }}"
     image: "{{ default_container_image }}"
-#   command: "{{ default_container_command }}"
+    command: "{{ default_container_command }}"
 #    ports:
 #      - "{{ mysql_port }}:3306"
     network_mode: host
@@ -16,6 +16,8 @@
       - "{{ mysql_data_directory }}:/var/lib/mysql"
     tmpfs:
       - /tmp:rw,size=1g,mode=177
+#    ulimits:
+#      - nofile=16824:16824
     memory: "{{ mysql_memory_limit }}"
     memory_swap: "{{ mysql_memory_limit }}"
     env:
@@ -23,6 +25,8 @@
       MYSQL_ALLOW_EMPTY_PASSWORD: "{{ mysql_allow_empty_password }}"
       MYSQL_USER: "{{ mysql_user }}"
       MYSQL_PASSWORD: "{{ mysql_password }}"
+      MYSQL_INITDB_SKIP_TZINFO: "true"
+      TZ: Asia/Seoul
     restart: true
     restart_policy: unless-stopped
     state: started
