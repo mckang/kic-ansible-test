@@ -4,14 +4,14 @@
   become: true
   vars:
     mysql_container_name: mysql5
+    mysql_database: mydb
+    mysql_memory_limit: 1G
+    mysql_env:
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: kakaoi
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
   roles:
     - docker
     - mysql
-        mysql_database: mydb
-        mysql_memory_limit: 1G    
-        mysql_env:
-          MYSQL_DATABASE: mydb
-          MYSQL_USER: kakaoi
-          MYSQL_PASSWORD: secret
-          MYSQL_ROOT_PASSWORD: ""
-          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"          
