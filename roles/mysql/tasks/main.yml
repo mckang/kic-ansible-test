@@ -1,15 +1,43 @@
 ---
-- name: Ensure mysql dirs exist
-  become: true
+- name: create mysql group
+  group:
+    name: mysql
+    gid: 1010
+    state: present  
+- name: create user
+  user:
+    name: mysql
+    uid: 1010
+    groups: 
+       - mysql
+    state: present
+    shell: /usr/sbin/nologin      
+    system: no             
+    createhome: no    
+- name: Creates directory
   file:
     path: "{{ item }}"
     state: directory
+    owner: mysql
+    group: mysql
+    mode: 0777
     recurse: yes
   with_items:
     - "{{ mysql_backups_dir }}"
     - "{{ mysql_conf_dir }}"
-    - "{{ mysql_lib_dir }}"
-
+    - "{{ mysql_lib_dir }}"    
+# - name: Ensure mysql dirs exist
+#   become: true
+#   file:
+#     path: "{{ item }}"
+#     state: directory
+#     owner: mysql
+#     group: mysql    
+#     recurse: yes
+#   with_items:
+#     - "{{ mysql_backups_dir }}"
+#     - "{{ mysql_conf_dir }}"
+#     - "{{ mysql_lib_dir }}"
 - name: Copy mysql config files
   template:
     src: "templates/{{ item }}.j2"
@@ -24,10 +52,14 @@
   docker_container:
     env:
       TZ: Asia/Seoul      
+      MYSQL_ALLOW_EMPTY_PASSWORD: "{{mysql_env.MYSQL_ALLOW_EMPTY_PASSWORD}}"
+      MYSQL_ROOT_PASSWORD: "{{mysql_env.MYSQL_ROOT_PASSWORD}}"
+      MYSQL_DATABASE: "{{mysql_env.MYSQL_DATABASE}}"
+      MYSQL_USER: "{{mysql_env.MYSQL_USER}}"
+      MYSQL_PASSWORD: "{{mysql_env.MYSQL_PASSWORD}}"      
     image: mysql:5.7
+    user: 1010:1010
     name: "{{ mysql_container_name }}"
-    ports:
-      - "{{ mysql_port }}:3306"
     pull: true
     recreate: true
     restart_policy: unless-stopped
