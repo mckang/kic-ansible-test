@@ -9,15 +9,11 @@
     name: "{{ default_container_name }}"
     image: "{{ default_container_image }}"
     command: "{{ default_container_command }}"
-#    ports:
-#      - "{{ mysql_port }}:3306"
     network_mode: host
     volumes:
-      - "{{ mysql_data_directory }}:/var/lib/mysql"
+      - "{{ mysql_data_directory }}"
     tmpfs:
       - /tmp:rw,size=1g,mode=177
-#    ulimits:
-#      - nofile=16824:16824
     memory: "{{ mysql_memory_limit }}"
     memory_swap: "{{ mysql_memory_limit }}"
     env:
