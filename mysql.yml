@@ -4,8 +4,8 @@
   become: true
   vars:
 #    mysql_port: 3306
-    mysql_root_password: null
-    mysql_allow_empty_password: yes
+    mysql_root_password: ""
+    mysql_allow_empty_password: "yes"
     mysql_user: kakaoi
     mysql_password: change-me
     mysql_data_directory: /data
