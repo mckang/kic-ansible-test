@@ -3,16 +3,15 @@
   connection: local
   become: true
   vars:
-#    mysql_port: 3306
-    default_container_command: "--default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci"
-    mysql_root_password: ""
-    mysql_allow_empty_password: "yes"
-    mysql_user: kakaoi
-    mysql_password: change-me
-    mysql_data_directory: /data:/var/lib/mysql
-    mysql_memory_limit: 1G
-    default_container_image: mysql:5.7.18
-    default_container_name: mysql5
+    mysql_container_name: mysql5
   roles:
     - docker
     - mysql
+        mysql_database: mydb
+        mysql_memory_limit: 1G    
+        mysql_env:
+          MYSQL_DATABASE: mydb
+          MYSQL_USER: kakaoi
+          MYSQL_PASSWORD: secret
+          MYSQL_ROOT_PASSWORD: ""
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes"          
