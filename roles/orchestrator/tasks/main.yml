@@ -1,3 +1,21 @@
+---
+- name: Creates directory
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: docker
+    group: docker
+    mode: 0644
+    recurse: yes
+  with_items:
+    - /data/orchestrator   
+- name: Copy orchestrator config files
+  template:
+    src: "templates/{{ item }}.j2"
+    dest: "/data/orchestrator/{{ item }}"
+    force: yes
+  with_items:
+    - "orchestrator.conf.json"
 - name: Run Orchestrator
   docker_container:
     image: openarkcode/orchestrator:latest
@@ -7,3 +25,5 @@
     restart_policy: unless-stopped
     state: started  
     network_mode: host
+    volumes:
+      - /data/orchestrator/orchestrator.cnf:/etc/orchestrator.conf.json
