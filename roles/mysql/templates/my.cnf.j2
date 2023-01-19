@@ -1,4 +1,6 @@
 [mysqld]
 {% for name,value in mysql_config_mysqld.items() %}
+{% if value is not none %}   
 {{ name }} = {{ value }}
+{% endif %}
 {% endfor %}
