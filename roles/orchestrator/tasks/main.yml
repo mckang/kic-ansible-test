@@ -1,0 +1,9 @@
+- name: Run Orchestrator
+  docker_container:
+    image: openarkcode/orchestrator:latest
+    name: orchestrator
+    pull: true
+    recreate: true
+    restart_policy: unless-stopped
+    state: started  
+    network_mode: host
