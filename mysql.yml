@@ -8,7 +8,9 @@
     mysql_memory_limit: 1G
     mysql_config_mysqld:
       max_connections: 500
-      skip_name_resolve: "true"    
+      skip_name_resolve: "true"
+      server-id: null
+      log-bin: null
     mysql_env:
       MYSQL_DATABASE: mydb
       MYSQL_USER: kakaoi
