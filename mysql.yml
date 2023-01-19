@@ -6,6 +6,9 @@
     mysql_container_name: mysql5
     mysql_database: mydb
     mysql_memory_limit: 1G
+    mysql_config_mysqld:
+      max_connections: 500
+      skip_name_resolve: "true"    
     mysql_env:
       MYSQL_DATABASE: mydb
       MYSQL_USER: kakaoi
