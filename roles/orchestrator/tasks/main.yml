@@ -26,4 +26,4 @@
     state: started  
     network_mode: host
     volumes:
-      - /data/orchestrator/orchestrator.cnf:/etc/orchestrator.conf.json
+      - /data/orchestrator/orchestrator.conf.json:/etc/orchestrator.conf.json
